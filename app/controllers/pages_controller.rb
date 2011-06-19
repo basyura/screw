@@ -2,8 +2,8 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.xml
   def show
-    stock = Stock.find(params[:id])
-    @page = Page.where(:url => stock.url).first
+    @stock = Stock.find(params[:id])
+    @page  = Page.where(:url => @stock.url).first
     unless @page
       @page = Page.crawl(stock.url)
       @page.save

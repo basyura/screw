@@ -7,6 +7,12 @@ class StocksController < ApplicationController
       redirect_to :user_root
     end
   end
+  def update
+    stock = Stock.find(params[:id])
+    stock.update_attributes(params[:stock])
+    stock.save
+    redirect_to :user_root
+  end
   def destroy
     @stock= Stock.find(params[:id])
     @stock.destroy

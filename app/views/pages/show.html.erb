@@ -1,8 +1,16 @@
 <p id="notice"><%= notice %></p>
 
+<%= form_for @stock , :method => 'put' do |f| %>
+  <%= f.hidden_field :read   , :value => 1 %>
+  <%= f.submit :value => :read %>
+<% end %>
+
 xpath : <%= @page.xpath %>
 <div>
 <%= raw @page.content %>
 </div>
 
-
+<%= form_for @stock , :method => 'put' do |f| %>
+  <%= f.hidden_field :read   , :value => 1 %>
+  <%= f.submit :value => :read %>
+<% end %>
