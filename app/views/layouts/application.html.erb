@@ -7,6 +7,10 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+<%= link_to :home , user_root_path if current_user %>
+<%= link_to('Sign out', [ :destroy, :user_session ], :class => 'signOut') if current_user %>
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
 
 <%= yield %>
 

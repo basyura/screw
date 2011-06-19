@@ -1,0 +1,16 @@
+
+<%= form_for(@stock , :url => stocks_path) do |f| %>
+  <%= f.text_field :url %> <%= f.submit %>
+  <%= f.hidden_field :user_id , :value => current_user.id %>
+<% end %>
+
+
+<ul>
+<% @stocks.each do |stock| %>
+  <li><%= link_to stock.title , page_path(stock.id) %> <%= stock.read %>
+  <%= link_to 'Destroy', stock, :confirm => 'Are you sure?', :method => :delete %>
+  </li>
+<% end %> 
+</ul>
+
+

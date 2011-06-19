@@ -1,4 +1,23 @@
 Typhoo::Application.routes.draw do
+
+  root :to => "welcome#index"
+
+  devise_for :users
+  get 'home', :to => 'home#index', :as => :user_root
+
+  post 'home', :to => 'home#create', :as => :home_create
+  
+  
+
+  #resources :tasks, :only => [ :index, :create ] do
+    #put :finish, :on => :member
+    #put :unfinish, :on => :member
+    #get :done, :on => :collection
+  #end
+
+  resources :stocks
+  resources :pages
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
