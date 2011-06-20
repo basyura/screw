@@ -1,6 +1,6 @@
 
 <%= form_for(@stock , :url => stocks_path) do |f| %>
-  <%= f.text_field :url %> <%= f.submit %>
+  <%= f.text_field :url , :size => 50 %> <%= f.submit :value => 'add' %>
   <%= f.hidden_field :user_id , :value => current_user.id %>
 <% end %>
 

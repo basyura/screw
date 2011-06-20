@@ -1,8 +1,5 @@
 class WelcomeController < ApplicationController
   def index
-    if current_user
-      redirect_to :user_root
-      return
-    end
+    redirect_to :user_root if current_user
   end
 end
