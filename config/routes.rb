@@ -5,7 +5,8 @@ Typhoo::Application.routes.draw do
   devise_for :users
   get 'home', :to => 'stocks#index', :as => :user_root
 
-  resources :home , :controller => 'stocks'
-  resources :stocks
+  scope '/home' do
+    resources :stocks
+  end
 
 end
