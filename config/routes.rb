@@ -3,9 +3,12 @@ Typhoo::Application.routes.draw do
   root :to => "welcome#index"
 
   devise_for :users
-  get 'home', :to => 'home#index', :as => :user_root
+  get 'home', :to => 'stocks#index', :as => :user_root
 
-  post 'home', :to => 'home#create', :as => :home_create
+  resources :home , :controller => 'stocks'
+  resources :stocks
+
+  #post 'home', :to => 'stocks#create', :as => :create_stock
   
   
 
@@ -15,7 +18,6 @@ Typhoo::Application.routes.draw do
     #get :done, :on => :collection
   #end
 
-  resources :stocks
   resources :pages
 
   # The priority is based upon order of creation:
