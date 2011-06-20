@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-Typhoo::Application.load_tasks
+Screw::Application.load_tasks
