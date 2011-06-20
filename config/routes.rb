@@ -1,4 +1,4 @@
-Typhoo::Application.routes.draw do
+Screw::Application.routes.draw do
 
   root :to => "welcome#index"
 

@@ -27,7 +27,7 @@ wedata api
   }
 =end
 
-module Typhoo
+module Screw
   class Crawler
     include ActionView::Helpers::SanitizeHelper
     SITE_INFO_API  = "http://wedata.net/databases/LDRFullFeed/items.json"
@@ -116,6 +116,6 @@ end
 
 if __FILE__ == $0
   url = 'http://news.2chblog.jp/archives/51614888.html'
-  p Typhoo::Crawler.new.crawl(url)
+  p Screw::Crawler.new.crawl(url)
 end
 
