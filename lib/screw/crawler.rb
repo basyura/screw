@@ -8,6 +8,7 @@ require 'kconv'
 require 'pstore'
 require 'uri'
 require 'yaml'
+require 'extractcontent'
 
 =begin
 
@@ -42,40 +43,21 @@ module Screw
       print "crawl #{url} ... "
       host  = URI.parse(url).host
       #xpath = @sources.has_key?(host) ? @sources[host] : '/'
-      xpath = '/'
-      @sources.each do |site|
-        if url =~ /#{site[:url]}/
-          xpath = site[:xpath]
-          puts "site url   = #{site[:url]}"
-          puts "site xpath = #{xpath}"
-          break
-        end
-      end
-      xpath = xpath.gsub(/(id\("(.*?)"\))/,'[@id="\\2"]')
-      puts "xpath = #{xpath}"
       agent = Mechanize.new
       if ENV['http_proxy']
         proxy = URI.parse(ENV['http_proxy'])
         agent.set_proxy(proxy.host , proxy.port)
       end
       page  = agent.get(url)
-      #page.encoding = encoding if encoding
-      while true
-        begin
-          node = page.at(xpath)
-          break
-        rescue
-          print " retry "
-          xpath = xpath.slice(/(.*)\// , 1)
-          if !xpath || !xpath.include?("/")
-            print "give up"
-            xpath = '/'
-            node = page.at(xpath)
-            break
-          end
-        end
+
+      source = @sources.detect{|site| url =~ /#{site[:url]}/ }
+      if source
+        content = extract_content_with_xpath(page, source[:xpath])
+      else
+        source = {:xpath => 'extract'}
+        content, title = ExtractContent::analyse(page.at('body').to_s.toutf8) # 本文抽出
       end
-      content = node.to_s.toutf8.gsub("" , "")
+      content = content.gsub("" , "")
       content = content.gsub(/<script.*?>.*?<\/script>/m,"")
       #content = content.gsub(/<iframe.*?>.*?<\/iframe>/m,"")
       content = strip_tags(content)
@@ -87,7 +69,7 @@ module Screw
       h[:content] = content
       h[:title]   = page.title
       h[:url]     = url
-      h[:xpath]   = xpath
+      h[:xpath]   = source[:xpath]
       h
     end
     private
@@ -110,6 +92,24 @@ module Screw
         http.request(req)
       end
       JSON.parse res.body
+    end
+    def extract_content_with_xpath(page , xpath)
+      xpath = xpath.gsub(/(id\("(.*?)"\))/,'[@id="\\2"]')
+      puts "xpath = #{xpath}"
+      #page.encoding = encoding if encoding
+      while true
+        begin
+          return page.at(xpath).to_s.toutf8
+        rescue
+          print " retry "
+          xpath = xpath.slice(/(.*)\// , 1)
+          if !xpath || !xpath.include?("/")
+            print "give up"
+            xpath = 'body'
+            return page.at(xpath).to_s.toutf8
+          end
+        end
+      end
     end
   end
 end
